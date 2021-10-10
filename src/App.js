@@ -1,23 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
+import Forecast from './components/Forecast';
+import styled from 'styled-components';
+
+const Wrapper = styled.main`
+  display: grid;
+  justify-content: center;
+`;
+
+const Title = styled.h1`
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+`;
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Title>Metal's Weather App</Title>
       </header>
+      <Wrapper>
+        <Forecast />
+      </Wrapper>
+      <footer>
+        
+      </footer>
     </div>
   );
 }
