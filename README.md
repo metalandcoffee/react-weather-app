@@ -1,3 +1,18 @@
+# Weather app with To-Do List (React.js)
+
+### Pending improvements:
+
+-   Add To-Do List functionality
+-   Look into Realm/Context Manager to minimize API calls (without need for dB)
+-   Be able to search by zipcode
+-   Add google maps
+-   So different weather icons based on queried weather
+-   Find ways to minimize API calls
+
+Resources/Things to Note
+
+-   ???
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

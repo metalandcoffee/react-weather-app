@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Conditions from "./Conditions/Conditions";
+import { Geocoding } from "./APIs/Google";
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -63,26 +64,38 @@ const Forecast = () => {
 
     async function getForecast(e) {
         e.preventDefault();
-
-        // If city field is empty...
+        console.log('clicked');
+        // If city/address/zipcode field is empty...
         if ('' === city) {
-            setResponseObj({ msg: 'City field is empty.' });
+            setResponseObj({ msg: 'Field is empty.' });
             return;
         }
+
+        const coords = await Geocoding(uriEncodedCity, responseObj, setResponseObj);
+
+        // If coordinates not found.
+        if (!coords.geometry.location) {
+            setResponseObj({ msg: 'Could not find coordinations for location.' });
+            return;
+        }
+
+        const coordsStr = `${coords.geometry.location.lat},${coords.geometry.location.lng}`;
+
         try {
-            const data = await fetch(`https://community-open-weather-map.p.rapidapi.com/weather?q=${uriEncodedCity}&lat=0&lon=0&id=2172797&lang=null&units=${unit}`, {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
-                    "x-rapidapi-key": process.env.REACT_APP_WEATHER_API_KEY
-                }
+            let data = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${process.env.REACT_APP_ACCUWEATHER_API_KEY}&q=${coordsStr}`, {
+                "method": "GET"
+            });
+
+            const locationObj = await data.json();
+
+            data = await fetch(`http://dataservice.accuweather.com/currentconditions/v1/${locationObj.Key}?apikey=${process.env.REACT_APP_ACCUWEATHER_API_KEY}`, {
+                "method": "GET"
             });
             const weather = await data.json();
-            console.log(weather);
-            setResponseObj(weather);
+            setResponseObj({ address: coords.formatted_address, weather: weather[0] });
 
         } catch (e) {
-            console.log(e);
+            setResponseObj({ msg: `${e.message}. Try again later.` });
         }
     }
 
@@ -118,7 +131,7 @@ const Forecast = () => {
                         value="metric"
                         onChange={(e) => setUnit(e.target.value)}
                     />
-                    Celcius
+                    Celsius
                 </label>
                 <Button type="submit">Get Forecast</Button>
             </form>

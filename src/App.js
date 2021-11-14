@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Forecast from './components/Forecast';
 import styled from 'styled-components';
@@ -26,7 +25,7 @@ function App() {
         <Forecast />
       </Wrapper>
       <footer>
-        
+
       </footer>
     </div>
   );

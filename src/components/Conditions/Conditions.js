@@ -22,19 +22,16 @@ const Placeholder = styled.div`
 
 const Conditions = (props) => {
     const { responseObj } = props;
-
-    if (404 === parseInt(responseObj.cod)) {
-        responseObj.msg = 'City not found.';
-    }
+    console.log(responseObj);
     return (
         <div>
-            {responseObj.cod === 200 ?
+            {undefined !== responseObj.weather ?
                 <Wrapper>
                     <p>
                         <Marker />
-                        <strong>{responseObj.name}</strong>
+                        <strong>{responseObj.address}</strong>
                     </p>
-                    <p>It is currently {Math.round(responseObj.main.temp)} degrees out with {responseObj.weather[0].description}.</p>
+                    <p>It is currently {Math.round(responseObj.weather.Temperature.Imperial.Value)} degrees out and it is {responseObj.weather.WeatherText}.</p>
                 </Wrapper>
                 :
                 <Wrapper>
