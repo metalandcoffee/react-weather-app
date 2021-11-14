@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Conditions from "./Conditions/Conditions";
+import Conditions from "./Conditions";
 import { Geocoding } from "./APIs/Google";
 import styled from 'styled-components';
 
@@ -58,6 +58,7 @@ const Forecast = () => {
     let [responseObj, setResponseObj] = useState({});
     let [city, setCity] = useState('');
     let [unit, setUnit] = useState('imperial');
+    let [coords, setCoords] = useState('');
 
     // Format city to be URL-friendly.
     const uriEncodedCity = encodeURIComponent(city);
@@ -71,15 +72,16 @@ const Forecast = () => {
             return;
         }
 
-        const coords = await Geocoding(uriEncodedCity, responseObj, setResponseObj);
+        const geocodeObj = await Geocoding(uriEncodedCity, responseObj, setResponseObj);
 
         // If coordinates not found.
-        if (!coords.geometry.location) {
+        if (!geocodeObj.geometry.location) {
             setResponseObj({ msg: 'Could not find coordinations for location.' });
             return;
         }
 
-        const coordsStr = `${coords.geometry.location.lat},${coords.geometry.location.lng}`;
+        setCoords(geocodeObj.geometry.location);
+        const coordsStr = `${geocodeObj.geometry.location.lat},${geocodeObj.geometry.location.lng}`;
 
         try {
             let data = await fetch(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${process.env.REACT_APP_ACCUWEATHER_API_KEY}&q=${coordsStr}`, {
@@ -92,7 +94,7 @@ const Forecast = () => {
                 "method": "GET"
             });
             const weather = await data.json();
-            setResponseObj({ address: coords.formatted_address, weather: weather[0] });
+            setResponseObj({ address: geocodeObj.formatted_address, weather: weather[0] });
 
         } catch (e) {
             setResponseObj({ msg: `${e.message}. Try again later.` });
@@ -103,7 +105,7 @@ const Forecast = () => {
         <Wrapper>
             <h2>Find Current Weather Conditions</h2>
             <div>
-                <Conditions responseObj={responseObj} />
+                <Conditions responseObj={responseObj} unit={unit} coords={coords} />
             </div>
             <form onSubmit={getForecast}>
                 <City

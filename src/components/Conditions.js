@@ -1,8 +1,9 @@
-import Marker from "../Icons/Marker";
+import Marker from "./Icons/Marker";
 import styled from 'styled-components';
-import Sun from '../Icons/Sun';
-import Cloud from '../Icons/Cloud';
-import Temp from '../Icons/Temp';
+import Sun from './Icons/Sun';
+import Cloud from './Icons/Cloud';
+import Temp from './Icons/Temp';
+import Map from './Map';
 
 const Wrapper = styled.div`
     min-height: 100px;
@@ -21,8 +22,12 @@ const Placeholder = styled.div`
 `;
 
 const Conditions = (props) => {
-    const { responseObj } = props;
-    console.log(responseObj);
+    const { responseObj, unit, coords } = props;
+    let selectedUnit = '';
+    if (undefined !== responseObj.weather) {
+        selectedUnit = 'metric' === unit ? responseObj.weather.Temperature.Metric.Value : responseObj.weather.Temperature.Imperial.Value;
+    }
+
     return (
         <div>
             {undefined !== responseObj.weather ?
@@ -31,7 +36,8 @@ const Conditions = (props) => {
                         <Marker />
                         <strong>{responseObj.address}</strong>
                     </p>
-                    <p>It is currently {Math.round(responseObj.weather.Temperature.Imperial.Value)} degrees out and it is {responseObj.weather.WeatherText}.</p>
+                    <p>It is currently {Math.round(selectedUnit)} degrees out and it is {responseObj.weather.WeatherText}.</p>
+                    <Map coords={coords} />
                 </Wrapper>
                 :
                 <Wrapper>

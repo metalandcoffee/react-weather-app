@@ -2,12 +2,14 @@
 
 ### Pending improvements:
 
--   Add To-Do List functionality
--   Look into Realm/Context Manager to minimize API calls (without need for dB)
--   Be able to search by zipcode
--   Add google maps
--   So different weather icons based on queried weather
--   Find ways to minimize API calls
+-   Add To-Do List functionality,
+-   Look into Realm/Context Manager to minimize API calls (without need for dB).
+-   ~~Be able to search by zipcode~~
+-   Add google maps.
+-   So different weather icons based on queried weather.
+-   Find ways to minimize API calls.
+-   Look into React Context to share data globally without manually having to thread it through each component.
+-   Non-US zip codes? (222521) work?
 
 Resources/Things to Note
 
