@@ -2,7 +2,9 @@ import { Loader } from "@googlemaps/js-api-loader"
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-    min-height: 200px;
+    min-height: 400px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 `;
 
 const Map = (props) => {

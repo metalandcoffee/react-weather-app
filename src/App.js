@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const Wrapper = styled.main`
   display: grid;
-  justify-content: center;
+  justify-content: stretch;
 `;
 
 const Title = styled.h1`

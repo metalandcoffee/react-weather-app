@@ -1,15 +1,16 @@
-# Weather app with To-Do List (React.js)
+# Weather app
 
 ### Pending improvements:
 
--   Add To-Do List functionality,
+-   👩🏾‍💻Show different weather icons based on fetched weather conditons.
+-   Default app load, grab user's current location if available.
 -   Look into Realm/Context Manager to minimize API calls (without need for dB).
 -   ~~Be able to search by zipcode~~
--   Add google maps.
--   So different weather icons based on queried weather.
+-   ~Add google maps.~
 -   Find ways to minimize API calls.
 -   Look into React Context to share data globally without manually having to thread it through each component.
 -   Non-US zip codes? (222521) work?
+-   Look into props.children (allows you to pass components as children to another component)
 
 Resources/Things to Note
 

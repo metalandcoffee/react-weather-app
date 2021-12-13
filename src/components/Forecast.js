@@ -5,9 +5,13 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     border-radius: 25px;
-    padding: 2rem;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background: rgb(158,137,237);
+    background: linear-gradient(211deg, rgba(158,137,237,1) 0%, rgba(223,178,223,1) 100%, rgba(0,212,255,1) 100%);
+
+    h2 {
+        font-size: 14px;
+    }
 `;
 
 const City = styled.input`
@@ -22,7 +26,7 @@ const City = styled.input`
 
     &::placeholder {
         font-family: 'Poppins', sans-serif;
-        color: #c9c9c9;
+        color: white;
     }
 
     &:focus-visible {
@@ -51,21 +55,47 @@ const Button = styled.button`
     }
 `;
 
+const UnitSelectWrapper = styled.div`
+    display: inline-flex;
+    margin: 2rem;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 100px;
+    button {
+        border: none;
+        background: none;
+        color: white;
+        padding: 3px 7px;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1;
+
+        &.active {
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.40);
+        }
+    }
+`;
+
+const Form = styled.form`
+    padding: 0 2rem;
+`;
+
 
 const Forecast = () => {
 
     // Define needed variables for tracking.
     let [responseObj, setResponseObj] = useState({});
     let [city, setCity] = useState('');
-    let [unit, setUnit] = useState('imperial');
+    let [unit, setUnit] = useState('metric');
     let [coords, setCoords] = useState('');
+    let [isCelsiusActive, setIsCelsiusActive] = useState(true);
+    let [isFarhenActive, setIsFarhenActive] = useState(false);
 
     // Format city to be URL-friendly.
     const uriEncodedCity = encodeURIComponent(city);
 
     async function getForecast(e) {
         e.preventDefault();
-        console.log('clicked');
         // If city/address/zipcode field is empty...
         if ('' === city) {
             setResponseObj({ msg: 'Field is empty.' });
@@ -101,13 +131,21 @@ const Forecast = () => {
         }
     }
 
+    const unitBtnToggle = (e) => {
+        const selectedUnit = e.target.value;
+        console.log(e.target.value);
+        setUnit(selectedUnit);
+        setIsCelsiusActive('metric' === selectedUnit);
+        setIsFarhenActive('imperial' === selectedUnit);
+    }
+
     return (
         <Wrapper>
-            <h2>Find Current Weather Conditions</h2>
-            <div>
-                <Conditions responseObj={responseObj} unit={unit} coords={coords} />
-            </div>
-            <form onSubmit={getForecast}>
+            <UnitSelectWrapper>
+                <button className={isCelsiusActive ? "active" : null} onClick={unitBtnToggle} value="metric">°C</button>
+                <button className={isFarhenActive ? "active" : null} onClick={unitBtnToggle} value="imperial">°F</button>
+            </UnitSelectWrapper>
+            <Form onSubmit={getForecast}>
                 <City
                     type="text"
                     placeholder="Enter City"
@@ -115,28 +153,12 @@ const Forecast = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                 />
-                <label>
-                    <input
-                        type="radio"
-                        name="units"
-                        checked={unit === "imperial"}
-                        value="imperial"
-                        onChange={(e) => setUnit(e.target.value)}
-                    />
-                    Fahrenheit
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="units"
-                        checked={unit === "metric"}
-                        value="metric"
-                        onChange={(e) => setUnit(e.target.value)}
-                    />
-                    Celsius
-                </label>
+
                 <Button type="submit">Get Forecast</Button>
-            </form>
+            </Form>
+            <div>
+                <Conditions responseObj={responseObj} unit={unit} coords={coords} />
+            </div>
         </Wrapper>
     )
 }
